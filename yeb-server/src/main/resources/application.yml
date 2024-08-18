@@ -38,3 +38,12 @@ mybatis-plus:
 logging:
   level:
     com.transbit.server.mapper: debug
+
+
+
+jwt:
+  # JWT存储的是请求头
+  tokenHeader: Authorization
+  secret: yeb-secret
+  expiration: 604800
+  tokenHead: Bearer
