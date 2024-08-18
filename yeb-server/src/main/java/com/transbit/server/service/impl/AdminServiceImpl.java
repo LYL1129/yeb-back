@@ -1,5 +1,6 @@
 package com.transbit.server.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.transbit.server.config.security.JwtTokenUtil;
 import com.transbit.server.pojo.Admin;
 import com.transbit.server.mapper.AdminMapper;
@@ -16,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,19 +42,31 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private IAdminService adminService;
+
+    @Autowired
+    private AdminMapper adminMapper;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
     /**
      * 登录之后返回token
+     *
      * @param username
      * @param password
+     * @param code
      * @param request
      * @return
      */
     @Override
-    public RespBean login(String username, String password, HttpServletRequest request) {
+    public RespBean login(String username, String password, String code, HttpServletRequest request) {
+        String captcha = (String) request.getSession().getAttribute("captcha");
+        if(!StringUtils.hasLength(code) || !captcha.equalsIgnoreCase(code)){
+            return RespBean.error("验证码输出错误，请重新输入！");
+        }
+        //登录
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if( null == userDetails || passwordEncoder.matches(password, userDetails.getPassword()) ){
+        if( null == userDetails || !passwordEncoder.matches(password, userDetails.getPassword()) ){
             return RespBean.error("用户名或密码不正确");
         }
         if(!userDetails.isEnabled()){
@@ -68,6 +83,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         tokenMap.put("token", token);
         tokenMap.put("tokenHead", tokenHead);
         return RespBean.success("登录成功", tokenMap);
+
+    }
+
+    @Override
+    public Admin getAdminByUserName(String username) {
+        return adminMapper.selectOne(new QueryWrapper<Admin>()
+                .eq("username", username)
+                .eq("enabled", true));
 
     }
 }

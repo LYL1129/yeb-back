@@ -27,7 +27,6 @@ import java.io.IOException;
  * @date 2024/8/18 14:38
  * @version 1.0
  */
-@Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;

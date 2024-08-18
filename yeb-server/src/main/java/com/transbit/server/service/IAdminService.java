@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.transbit.server.pojo.RespBean;
 import javax.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * <p>
  *  服务类
@@ -17,7 +15,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IAdminService extends IService<Admin> {
 
-    RespBean login(String username, String password, HttpServletRequest request);
+    RespBean login(String username, String password, String code, HttpServletRequest request);
 
-
+    /**
+     * 根据用户名获取用户
+     * @param username
+     * @return
+     */
+    public Admin getAdminByUserName(String username);
 }
