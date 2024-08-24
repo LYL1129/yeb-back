@@ -2,10 +2,12 @@ package com.transbit.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.transbit.server.config.security.JwtTokenUtil;
+import com.transbit.server.mapper.RoleMapper;
 import com.transbit.server.pojo.Admin;
 import com.transbit.server.mapper.AdminMapper;
 import com.transbit.server.pojo.Menu;
 import com.transbit.server.pojo.RespBean;
+import com.transbit.server.pojo.Role;
 import com.transbit.server.service.IAdminService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 //import jakarta.servlet.http.HttpServletRequest;
@@ -49,6 +51,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     @Autowired
     private AdminMapper adminMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
     /**
@@ -99,6 +104,16 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
                 .eq("username", username)
                 .eq("enabled", true));
 
+    }
+
+    /**
+     * 根据用户id查询角色列表
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<Role> getRoles(Integer adminId) {
+        return roleMapper.getRoles(adminId);
     }
 
 

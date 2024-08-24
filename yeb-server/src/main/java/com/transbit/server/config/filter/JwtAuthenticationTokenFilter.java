@@ -1,10 +1,11 @@
-package com.transbit.server.config.security;
+package com.transbit.server.config.filter;
 /**
  * @author lylstart
  * @data 2024/8/18 - 14:38
  * 2024 - 8月 - 周日 - 14 - 38
  */
 
+import com.transbit.server.config.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

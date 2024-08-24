@@ -1,18 +1,26 @@
 package com.transbit.server.config.security;
 
+import com.transbit.server.config.filter.CustomFilter;
+import com.transbit.server.config.filter.CustomUrlDecisionManager;
+import com.transbit.server.config.filter.JwtAuthenticationTokenFilter;
+import com.transbit.server.config.handler.RestAccessDeniedHandler;
+import com.transbit.server.config.handler.RestAuthorizationEntryPoint;
 import com.transbit.server.pojo.Admin;
 import com.transbit.server.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 /**
  * @author lylstart
@@ -41,6 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private RestAuthorizationEntryPoint authorizationEntryPoint;
     @Autowired
     private RestAccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
+    private CustomFilter customFilter;
+
+    @Autowired
+    private CustomUrlDecisionManager customUrlDecisionManager;
 
 //    @Autowired
 //    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
@@ -78,6 +92,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //除了上面的请求之外，所有请求都需要验证
                 .anyRequest()
                 .authenticated()
+                // 动态权限配置
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                    @Override
+                    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                        o.setAccessDecisionManager(customUrlDecisionManager);
+                        o.setSecurityMetadataSource(customFilter);
+                        return o;
+                    }
+                })
                 .and()
                 //禁用缓存
                 .headers()
@@ -104,11 +127,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return username->{
             Admin admin = adminService.getAdminByUserName(username);
             if (null != admin){
-//                admin.setRoles(adminService.getRoles(admin.getId()));
+              // 设置登录用户的id
+                admin.setRoles(adminService.getRoles(admin.getId()));
                 return admin;
             }
-            return null;
-//            throw new UsernameNotFoundException("用户名或密码错误");
+//            return null;
+            throw new UsernameNotFoundException("用户名或密码错误");
 
         };
     }

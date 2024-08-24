@@ -31,6 +31,14 @@
             <result column="enabled2" property="enabled" />
         </collection>
     </resultMap>
+    
+    <resultMap id="MenusWithRole" type="com.transbit.server.pojo.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="com.transbit.server.pojo.Role">
+            <id column="id" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, url, path, component, name, iconCls, keepAlive, requireAuth, parentId, enabled
@@ -44,6 +52,21 @@
         WHERE
             m1.id=m2.parentId AND m2.id=mr.mid AND mr.rid = ar.rid AND ar.adminId=1 AND m2.enabled=TRUE;
 
+    </select>
+
+<!--    /**-->
+<!--    * 根据角色获取菜单列表-->
+<!--    * @return-->
+<!--    */-->
+    <select id="getMenusWithRole" resultMap="MenusWithRole">
+        SELECT
+            m.*, r.id AS rid, r.`name` AS rname, r.nameZh AS rnameZh
+        FROM
+            t_menu m, t_menu_role mr, t_role r
+        WHERE
+            m.id=mr.mid AND mr.rid=r.id 
+        ORDER BY 
+            m.id
     </select>
 
 </mapper>

@@ -1,4 +1,4 @@
-package com.transbit.server.config.security;
+package com.transbit.server.config.handler;
 /**
  * @author lylstart
  * @data 2024/8/18 - 15:02
