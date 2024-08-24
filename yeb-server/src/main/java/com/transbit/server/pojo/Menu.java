@@ -1,9 +1,12 @@
 package com.transbit.server.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -55,6 +58,10 @@ public class Menu implements Serializable {
 
     @ApiModelProperty(value = "是否启用")
     private Boolean enabled;
-
-
+    /**
+     * 表字段不存在
+     */
+    @TableField(exist = false)
+    @ApiModelProperty(value="子菜单")
+    private List<Menu> children;
 }

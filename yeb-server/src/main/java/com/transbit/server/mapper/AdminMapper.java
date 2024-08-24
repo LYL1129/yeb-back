@@ -2,6 +2,9 @@ package com.transbit.server.mapper;
 
 import com.transbit.server.pojo.Admin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.transbit.server.pojo.Menu;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2024-08-10
  */
 public interface AdminMapper extends BaseMapper<Admin> {
+
 
 }

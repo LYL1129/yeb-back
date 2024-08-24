@@ -1,7 +1,10 @@
 package com.transbit.server.mapper;
 
+import com.transbit.server.pojo.Admin;
 import com.transbit.server.pojo.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
+    /**
+     * 通过用户id查询菜单列表
+     * @param id
+     * @return
+     */
+    List<Menu> getMenuByAdminId(Integer id);
 }

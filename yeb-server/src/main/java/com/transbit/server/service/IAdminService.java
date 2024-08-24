@@ -2,8 +2,10 @@ package com.transbit.server.service;
 
 import com.transbit.server.pojo.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.transbit.server.pojo.Menu;
 import com.transbit.server.pojo.RespBean;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -23,4 +25,7 @@ public interface IAdminService extends IService<Admin> {
      * @return
      */
     public Admin getAdminByUserName(String username);
+
+
+
 }

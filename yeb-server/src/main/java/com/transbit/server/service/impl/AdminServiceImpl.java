@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.transbit.server.config.security.JwtTokenUtil;
 import com.transbit.server.pojo.Admin;
 import com.transbit.server.mapper.AdminMapper;
+import com.transbit.server.pojo.Menu;
 import com.transbit.server.pojo.RespBean;
 import com.transbit.server.service.IAdminService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,6 +88,11 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     }
 
+    /**
+     * 根据用户名获取用户
+     * @param username
+     * @return
+     */
     @Override
     public Admin getAdminByUserName(String username) {
         return adminMapper.selectOne(new QueryWrapper<Admin>()
@@ -93,4 +100,6 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
                 .eq("enabled", true));
 
     }
+
+
 }
