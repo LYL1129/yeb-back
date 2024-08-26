@@ -39,6 +39,20 @@
             <result column="rnameZh" property="nameZh"/>
         </collection>
     </resultMap>
+    
+    <resultMap id="MenusWithChildren" type="com.transbit.server.pojo.Menu" extends="BaseResultMap">
+        <id column="id1" property="id"/>
+        <result column="name1" property="name"/>
+        <collection property="children" ofType="com.transbit.server.pojo.Menu">
+            <id column="id2" property="id"/>
+            <result column="name2" property="name"/>
+            <collection property="children" ofType="com.transbit.server.pojo.Menu">
+                <id column="id3" property="id"/>
+                <result column="name3" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+    
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, url, path, component, name, iconCls, keepAlive, requireAuth, parentId, enabled
@@ -67,6 +81,25 @@
             m.id=mr.mid AND mr.rid=r.id 
         ORDER BY 
             m.id
+    </select>
+
+
+    <select id="getAllMenus" resultMap="MenusWithChildren">
+        SELECT
+            m1.id AS id1,
+            m1.name AS name1,
+            m2.id AS id2,
+            m2.name AS name2,
+            m3.id AS id3,
+            m3.name AS name3
+        FROM
+            t_menu m1
+                JOIN
+            t_menu m2 ON m1.id = m2.parentId
+                JOIN
+            t_menu m3 ON m2.id = m3.parentId
+        WHERE
+            m3.enabled = TRUE;
     </select>
 
 </mapper>

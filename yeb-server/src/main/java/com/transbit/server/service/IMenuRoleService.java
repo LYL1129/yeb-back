@@ -2,6 +2,7 @@ package com.transbit.server.service;
 
 import com.transbit.server.pojo.MenuRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.transbit.server.pojo.RespBean;
 
 /**
  * <p>
@@ -13,4 +14,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMenuRoleService extends IService<MenuRole> {
 
+    /**
+     * 更新角色菜单
+     * @param rid
+     * @param mids
+     * @return
+     */
+    public RespBean updateMenuRole(Integer rid, Integer[] mids);
 }
